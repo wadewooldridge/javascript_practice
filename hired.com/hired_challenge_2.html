@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hired Challenge 2</title>
+    <script>
+        // Return boolean of whether brace combinations in string are validly nested.
+        function validBraces(expression) {
+            //console.log('validBraces: ' + expression);
+            var openers = ['[', '(', '{'];
+            var closers = [']', ')', '}'];
+            // Array of current nesting depth. Use indexOf openers/closers, or -1 for nothing.
+            var nesting = [];
+
+            for (var i = 0; i < expression.length; i++) {
+                var c = expression[i];
+                //console.log('c: ' + c);
+
+                // If this is an opener, it is always valid and adds a level of nesting.
+                var openerIndex = openers.indexOf(c);
+                if (openerIndex != -1) {
+                    //console.log('Pushing: ' + openerIndex);
+                    nesting.push(openerIndex);
+                    continue;
+                }
+
+                // If this is a closer, check whether it is validly closing the current nesting level.
+                var closerIndex = closers.indexOf(c);
+                if (closerIndex != -1) {
+                    // Closing, but nothing to close.
+                    if (nesting.length === 0) {
+                        return false;
+                    }
+                    // Closing, but closing some wrong bracket.
+                    if (closerIndex != nesting[nesting.length - 1]) {
+                        return false;
+                    }
+                    // Closing, and closing correct bracket.
+                    //console.log('Popping');
+                    nesting.pop();
+                }
+            }
+
+            // Now that the for-loop is done, nesting should be empty if all the brackets matched.
+            return (nesting.length === 0);
+        }
+
+        function checkExpressions(expressions) {
+            for (var i = 0; i < expressions.length; i++) {
+                console.log(validBraces(expressions[i]) ? '1' : '0');
+            }
+        }
+
+        var expressions = [')(){}', '[]({})', '([])', '{()[]}', '([)]'];
+        checkExpressions(expressions);
+    </script>
+</head>
+<body>
+<h3>See console log for results.</h3>
+</body>
+</html>
