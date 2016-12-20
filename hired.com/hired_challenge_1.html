@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hired Challenge 1</title>
+    <script>
+        // Return boolean of whether two words are anagrams of one another.
+        // Can assume words are all lower-case a-z.
+        function isAnagram(word1, word2) {
+            //console.log('isAnagram: ' + word1 + ', ' + word2);
+
+            if (word1.length !== word2.length) {
+                return false;
+            }
+
+            var word1Sorted = word1.split('').sort().join('');
+            var word2Sorted = word2.split('').sort().join('');
+            return (word1Sorted === word2Sorted);
+        }
+
+        function checkAnagramLists(firstWords, secondWords) {
+            for (var i = 0; i < Math.min(firstWords.length, secondWords.length); i++) {
+                console.log(isAnagram(firstWords[i], secondWords[i]) ? '1' : '0');
+            }
+        }
+
+        var firstWords = ['cinema', 'host', 'aba', 'train'];
+        var secondWords = ['iceman', 'shot', 'bab', 'rain'];
+        checkAnagramLists(firstWords, secondWords);
+    </script>
+</head>
+<body>
+<h3>See console log for results.</h3>
+</body>
+</html>
