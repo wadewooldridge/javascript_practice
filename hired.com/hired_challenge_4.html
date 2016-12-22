@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hired Challenge 4</title>
+    <script>
+        /**
+         *  calculateMaxDeviation - Get max deviation (max-min) in any subsequence in array.
+         *  @param  {int}   v - Sequence to operate on.
+         *  @param  {int}   d - Distance in array for subsequence
+         *  @return {int}   Minimum variance to create an ascending array.
+         */
+        function calculateMaxDeviation(v, d) {
+            function getMin(lowIndex, highIndex) {
+                var tempMin = Number.MAX_VALUE;
+                for (var i = lowIndex; i <= highIndex; i++) {
+                    if (v[i] < tempMin) {
+                        tempMin = v[i];
+                    }
+                }
+                //console.log('getMin(' + lowIndex + ',' + highIndex + ')=' + tempMin);
+                return tempMin;
+            }
+
+            function getMax(lowIndex, highIndex) {
+                var tempMax = 0;
+                for (var i = lowIndex; i <= highIndex; i++) {
+                    if (v[i] > tempMax) {
+                        tempMax = v[i];
+                    }
+                }
+                //console.log('getMax(' + lowIndex + ',' + highIndex + ')=' + tempMax);
+                return tempMax;
+            }
+
+            // Set up initial values based on the first slice.
+            var lastMin = getMin(0, d-1);
+            var lastMax = getMax(0, d-1);
+            var maxDeviation = lastMax - lastMin;
+
+            for (var i = 1; i < v.length - d; i++) {
+                var newValue = v[i + d - 1];
+
+                // If the newValue is in the same range, no need to get new deviation.
+                if (newValue >= lastMin && newValue <= lastMax) {
+                    //console.log('slice[' + i + ',' + (i+d-1) + ']: skipping ' + newValue);
+                    continue;
+                }
+                lastMin = getMin(i, i+d-1);
+                lastMax = getMax(i, i+d-1);
+                var deviation = lastMax - lastMin;
+                if (deviation > maxDeviation) {
+                    //console.log('slice[' + i + ',' + (i+d-1) + ']: new max ' + deviation);
+                    maxDeviation = deviation;
+                }
+                maxDeviation = Math.max(maxDeviation, deviation);
+            }
+
+            return maxDeviation;
+        }
+
+        var testSequence1 = [6, 9, 4, 7, 4, 1];
+        var testDistance1 = 3;
+        console.log(calculateMaxDeviation(testSequence1, testDistance1));
+//        var testSequence2 = [6, 9, 4, 7, 4, 1, 11, 13, 3, 2, 1, 7];
+//        var testDistance2 = 3;
+//        console.log(calculateMaxDeviation(testSequence2, testDistance2));
+    </script>
+</head>
+<body>
+<h4>See console log for results.</h4>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hired Challenge 3</title>
+    <script>
+        /**
+         *  calculateMinVariance
+         *  @param  {int}   v - Sequence to operate on.
+         *  @return {int}   Minimum variance to create an ascending array.
+         */
+        function calculateMinVariance(v) {
+            var minVariance = Number.MAX_VALUE;
+            var maxVariance = 0;
+
+            for (var index = 0; index < v.length; index++) {
+                var value = v[index];
+                var variance = value - index;
+                //console.log('index: ' + index + ', variance: ' + variance);
+                if (variance < minVariance) {
+                    minVariance = variance;
+                }
+                if (variance > maxVariance) {
+                    maxVariance = variance;
+                }
+            }
+
+            return Math.floor((maxVariance - minVariance + 1) / 2);
+        }
+
+        var testSequence = [5, 4, 3, 2, 8];
+        //var testSequence2 = [100, 102, 99, 104, 108];
+        console.log(calculateMinVariance(testSequence));
+        //console.log(calculateMinVariance(testSequence2));
+    </script>
+</head>
+<body>
+<h4>See console log for results.</h4>
+</body>
+</html>
