@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Average Color</title>
+    <script>
+        /**
+         *  calculateAverageColor - return average of two 6-digit hex RGB strings.
+         *  @input      {string}    firstColor
+         *  @input      {string}    secondColor
+         *  @returns    {string}    average color
+         */
+        function calculateAverageColor(firstColor, secondColor) {
+            var result = '';
+
+            // Step through each of the three, two-digit hex parts.
+            for (var i = 0; i < 6; i += 2) {
+                var v1 = parseInt(firstColor.substring(i,i+2), 16);
+                var v2 = parseInt(secondColor.substring(i,i+2), 16);
+                var average = Math.round((v1 + v2) / 2);
+
+                // Concatenate the resultant hex value, adding a leading zero if necessary.
+                if (average <= 15)
+                    result += '0';
+
+                // Add the resultant hex string.
+                result += average.toString(16);
+            }
+            return result;
+        }
+
+        /**
+         *  test_calculateAverageColor - unit test
+         *  @returns    {boolean}   all tests passed.
+         */
+        function test_calculateAverageColor() {
+            var success = true;
+            // Test data - make sure lower and upper-case hex work, and check rouding.
+            var testColors = [
+                // color1, color2, average
+                ['000000', 'ffffff', '808080'],
+                ['eeddcc', '000000', '776f66'],
+                ['123456', '654321', '3c3c3c'],
+                ['A1B2C3', 'd4e5f6', 'bbccdd']
+            ];
+
+            for (var i = 0; i < testColors.length; i++) {
+                var testArray = testColors[i];
+                var color1 = testArray[0];
+                var color2 = testArray[1];
+                var expected = testArray[2];
+                var actual = calculateAverageColor(color1, color2);
+
+                if (actual !== expected) {
+                    console.warn('calculateAverageColor(' + color1 + ',' + color2 + ') expected ' + expected +
+                                 ', received ' + actual);
+                    success = false;
+                }
+            }
+
+            return success;
+        }
+
+        console.log('test_calculateAverageColor: ' + (test_calculateAverageColor() ? 'passed' : 'failed'));
+    </script>
+</head>
+<body>
+<h2>See console log for results.</h2>
+</body>
+</html>
