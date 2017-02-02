@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML Array To String</title>
+    <script>
+        /**
+         *  escapeHtmlString - convert a string to safe representation by escaping amp, quotes, and angle brackets.
+         *  @input      {string}    String containing potentially unsafe characters.
+         *  @returns    {string}    String with unsafe characters escaped.
+         */
+        function escapeHtmlString(inString) {
+            return String(inString)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        /**
+         *  htmlArrayToString - convert an array of an HTML tag plus optional strings to a formatted HTML string.
+         *  @input      {[object]}  Array where first element is a string with an tag name, and the remaining elements
+         *                          are either text strings to include in that element, or arrays to be processed
+         *                          recursively and included in the formatted element.  Text strings have to be
+         *                          made HTML-safe, with angle brackets converted to escape characters.
+         *  @returns    {object}    Formatted HTML string, or false for invalid input.
+         */
+        function htmlArrayToString(elements) {
+            if (elements === undefined || !Array.isArray(elements) || elements.length === 0) {
+                // Handle invalid input.
+                console.warn('Invalid input to htmlArrayToString');
+                return false;
+            } else if (elements.length === 1) {
+                // Handle single self-closing tag.
+                return '<' + elements[0] + '/>';
+            } else {
+                // Handle tag with embedded string(s).
+                var tag = elements[0];
+                var result = '<' + tag + '>';
+
+                // For each element, add text or add sub-array.
+                for (var i = 1; i < elements.length; i++) {
+                    var element = elements[i];
+                    if (Array.isArray(element)) {
+                        result += htmlArrayToString(element);
+                    } else {
+                        result += escapeHtmlString(element);
+                    }
+                }
+
+                // Add closing tag.
+                result += '</' + tag + '>';
+                return result;
+            }
+        }
+
+        /**
+         *  test_htmlArrayToString - unit test
+         *  @returns    {boolean}   all tests passed.
+         */
+        function test_htmlArrayToString() {
+            var success = true;
+
+            var testData = [
+                // input, expected return string.
+                // Test self-closing.
+                [['div'], '<div/>'],
+                // Test embedded text and normal closing.
+                [['h1', 'Text'], '<h1>Text</h1>'],
+                // Test multiple embedded text values.
+                [['span', 'More', 'Text'], '<span>MoreText</span>'],
+                // Test multiple levels of array.
+                [['a', ['b', 'More'], ' Text'], '<a><b>More</b> Text</a>'],
+                // Test escaping angle brackets, quotes, and ampersand.
+                [['p', ' "&" <b>Text</b>'], '<p> &quot;&amp;&quot; &lt;b&gt;Text&lt;/b&gt;</p>']
+            ];
+
+            for (var i = 0; i < testData.length; i++) {
+                var testArray = testData[i];
+                var inputArray = testArray[0];
+                var expected = testArray[1];
+                var actual = htmlArrayToString(inputArray);
+
+                if (actual !== expected) {
+                    console.warn('htmlArrayToString([' + inputArray + ']) expected ' + expected +
+                                 ', received ' + actual);
+                    success = false;
+                }
+            }
+
+            return success;
+        }
+
+        console.log('test_htmlArrayToString: ' + (test_htmlArrayToString() ? 'passed' : 'failed'));
+    </script>
+</head>
+<body>
+<h2>See console log for results.</h2>
+</body>
+</html>
